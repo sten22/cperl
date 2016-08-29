@@ -9750,7 +9750,7 @@ Perl_sv_resetpvn(pTHX_ const char *s, STRLEN len, HV * const stash)
 	}
 	for (i = 0; i <= (I32) HvMAX(stash); i++) {
 	    HE *entry;
-	    for (entry = HvARRAY(stash)[i];
+	    for (entry = HvARRAY(stash)[i].hent_he;
 		 entry;
 		 entry = HeNEXT(entry))
 	    {
@@ -15655,7 +15655,7 @@ STATIC SV*
 S_find_hash_subscript(pTHX_ const HV *const hv, const SV *const val)
 {
     dVAR;
-    HE **array;
+    AHE *array;
     I32 i;
 
     PERL_ARGS_ASSERT_FIND_HASH_SUBSCRIPT;
@@ -15668,7 +15668,7 @@ S_find_hash_subscript(pTHX_ const HV *const hv, const SV *const val)
 
     for (i=HvMAX(hv); i>=0; i--) {
 	HE *entry;
-	for (entry = array[i]; entry; entry = HeNEXT(entry)) {
+	for (entry = array[i].hent_he; entry; entry = HeNEXT(entry)) {
 	    if (HeVAL(entry) != val)
 		continue;
 	    if (    HeVAL(entry) == &PL_sv_undef ||
